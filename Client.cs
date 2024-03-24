@@ -31,25 +31,21 @@ class Client
     {
         await Console.Out.WriteAsync("\nyou want to:\n1) register\n2) log in\nyour choice: ");
 
-        string str_choice = Console.ReadLine();
-        char choice = str_choice[0];
+        ConsoleKeyInfo choice = Console.ReadKey();
 
 
         User user = new User();
 
-        await Console.Out.WriteAsync("\nLogin: ");
+        await Console.Out.WriteAsync("\n\nLogin: ");
         user.Login = Console.ReadLine();
 
         await Console.Out.WriteAsync("Password: ");
-        user.Password = Console.ReadLine();
+        user.Password = SHA.ConvertToSHA256(Console.ReadLine());
 
-        user.IsNewUser = choice == '1';
-
-
-        string str_user = Newtonsoft.Json.JsonConvert.SerializeObject(user);
+        user.IsNewUser = choice.Key == ConsoleKey.D1;
 
 
-        await Interaction.WriteToStream(client, str_user);
+        await Interaction.WriteToStream(client, Newtonsoft.Json.JsonConvert.SerializeObject(user));
     }
 
     public static async Task Main(string[] args)
