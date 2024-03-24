@@ -1,8 +1,15 @@
-﻿using System.Net.Sockets;
+using System.Net.Sockets;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace Classes
 {
+
+    public class SHA
+    {
+        public static string ConvertToSHA256(string str) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(str)));
+    }
+
     public enum ErrorMessage
     {
         None,
@@ -58,6 +65,23 @@ namespace Classes
             string str = Encoding.UTF8.GetString(bytes.ToArray());
 
             return str;
+        }
+    }
+
+    public class Json
+    {
+        public static void UploadToFile(List<User> Users)
+        {
+            string str = Newtonsoft.Json.JsonConvert.SerializeObject(Users);
+
+            File.WriteAllText("userdata.json", str);
+        }
+
+        public static void DownloadFromFile(ref List<User> Users)
+        {
+            string str = File.ReadAllText("userdata.json");
+
+            if (str.Length > 0) Users = Newtonsoft.Json.JsonConvert.DeserializeObject<List<User>>(str);
         }
     }
 }
