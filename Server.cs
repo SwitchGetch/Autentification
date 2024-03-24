@@ -23,6 +23,8 @@ class Server
             {
                 user.IsNewUser = false;
                 Users.Add(user);
+
+                Json.UploadToFile(Users);
             }
         }
         else
@@ -39,9 +41,7 @@ class Server
     {
         while (true)
         {
-            string user_message = Interaction.ReadfromStream(client);
-
-            User user = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(user_message);
+            User user = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(Interaction.ReadfromStream(client));
 
             Message answer = new Message() { IsAllOK = true, error = ErrorMessage.None };
 
@@ -59,6 +59,8 @@ class Server
 
         Console.WriteLine("Server started...\n");
 
+
+        Json.DownloadFromFile(ref Users);
 
         while (true)
         {
